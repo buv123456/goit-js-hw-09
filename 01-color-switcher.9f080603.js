@@ -1,0 +1,2 @@
+let t;const e=()=>`#${Math.floor(16777215*Math.random()).toString(16).padStart(6,0)}`,o=(...t)=>t.forEach(t=>t.toggleAttribute("disabled")),r=document.querySelector("body"),a=document.querySelector("button[data-start]"),n=document.querySelector("button[data-stop]");o(n),r.addEventListener("click",function(c){c.target===a&&(o(a,n),t=setInterval(()=>r.style.backgroundColor=e(),1e3)),c.target===n&&(o(a,n),clearInterval(t))});
+//# sourceMappingURL=01-color-switcher.9f080603.js.map
