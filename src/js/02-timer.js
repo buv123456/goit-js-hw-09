@@ -9,7 +9,7 @@ const options = {
     minuteIncrement: 1,
     onClose(selectedDates) {
         console.log(selectedDates[0]);
-        if (!isDateBigger) Report.warning('Please choose a date in the future', '', 'Okay');
+        if (isDateBigger(selectedDates[0])) Report.warning('Please choose a date in the future', '', 'Okay');
     },
 };
 
@@ -19,28 +19,30 @@ const datetimePickerEl = document.querySelector('#datetime-picker');
 const btnEl = document.querySelector('[data-start]');
 const dataTimerEls = document.querySelectorAll('.value');
 let newDate;
-let isDateBigger;
 let idTimer;
 btnEl.disabled = true;
 
-datetimePickerEl.addEventListener('input', onInput)
+datetimePickerEl.addEventListener('input', onInput);
+
+btnEl.addEventListener('click', onClick);
 
 function onInput(evt) {
     newDate = new Date(evt.target.value);
-    isDateBigger = newDate > options.defaultDate;
-    btnEl.disabled = isDateBigger ? false : true;
-    console.log(options);
+    btnEl.disabled = isDateBigger(newDate);
     return
 }
 
-btnEl.addEventListener('click', onClick)
-
 function onClick() {
+    if (isDateBigger(newDate)) {
+        Report.warning('Please choose a date in the future', '', 'Okay');
+        toggle(btnEl);
+        return
+    }
     toggle(btnEl, datetimePickerEl);
     let timer = Math.floor((newDate - new Date()) / 1000);
     idTimer = setInterval(() => {
         timer -= 1;
-        updateTimer(objTimer(timer));
+        updateTimer(convertMs(timer));
         if (timer <= 0) stopTimer();
     }, 1000);
 }
@@ -51,14 +53,33 @@ function stopTimer() {
     toggle(btnEl, datetimePickerEl)
 }
 
-function objTimer(sec) {
+// ---------- Мій варіант функції-----------
+function convertMs(sec) {
     return {
         days: Math.floor(sec / 60 / 60 / 24).toString().padStart(2, 0),
         hours: Math.floor((sec % (60 * 60 * 24)) / 60 / 60).toString().padStart(2, 0),
         minutes: Math.floor((sec % (60 * 60)) / 60).toString().padStart(2, 0),
-        seconds: Math.floor(sec % 60).toString().padStart(2, 0),
+        seconds: (sec % 60).toString().padStart(2, 0),
     }
 }
+
+// function convertMs(ms) {
+//     // Number of milliseconds per unit of time
+//     const second = 1000;
+//     const minute = second * 60;
+//     const hour = minute * 60;
+//     const day = hour * 24;
+//     // Remaining days
+//     const days = Math.floor(ms / day);
+//     // Remaining hours
+//     const hours = Math.floor((ms % day) / hour);
+//     // Remaining minutes
+//     const minutes = Math.floor(((ms % day) % hour) / minute);
+//     // Remaining seconds
+//     const seconds = Math.floor((((ms % day) % hour) % minute) / second);
+
+//     return { days, hours, minutes, seconds };
+// }
 
 function updateTimer(obj) {
     dataTimerEls.forEach(i => {
@@ -69,4 +90,10 @@ function updateTimer(obj) {
     });
 }
 
-function toggle(...items) { items.forEach(i => i.toggleAttribute('disabled')) };
+function toggle(...items) {
+    items.forEach(i => i.toggleAttribute('disabled'))
+};
+
+function isDateBigger(time) {
+    return time <= new Date();
+};

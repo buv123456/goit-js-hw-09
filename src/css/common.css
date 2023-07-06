@@ -1,3 +1,5 @@
+
+
 * {
   box-sizing: border-box;
 }
@@ -13,6 +15,34 @@ body {
 }
 
 img {
-  display: block;
+    display: block;
   max-width: 100%;
+}
+
+.timer {
+  padding-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  padding: 0px 12px;
+  
+}
+
+.value {
+  text-align: center;
+  font-weight: bold;
+  font-size: 64px;
+  border: solid #212121 2px;
+  border-radius: 5px;
+
+}
+
+.field > .label{
+  text-align: center;
+  font-size: 24px;
 }
