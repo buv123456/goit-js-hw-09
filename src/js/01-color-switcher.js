@@ -1,5 +1,4 @@
 const getRandomHexColor = () => `#${Math.floor(Math.random() * 16777215).toString(16).padStart(6, 0)}`;
-const toggleBtn = ((...btns) => btns.forEach(i => i.toggleAttribute('disabled')));
 
 const bodyEl = document.querySelector('body')
 const btnStartEl = document.querySelector('button[data-start]');
@@ -21,5 +20,6 @@ function onClick(evt) {
     };
 }
 
+function toggleBtn(...btns) { btns.forEach(i => i.toggleAttribute('disabled')) };
 
 
